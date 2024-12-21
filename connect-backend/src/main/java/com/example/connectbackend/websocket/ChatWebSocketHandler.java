@@ -34,7 +34,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         try {
-            Map<String, Object> attributes = session.getAttributes();
             // Try multiple ways to get the userId
             String senderId = null;
             // Try from URI query parameters
