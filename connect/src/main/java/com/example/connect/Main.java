@@ -14,7 +14,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -85,13 +84,15 @@ public class Main extends Application {
                     errorLabel.setVisible(true);
                     return;
                 }
-                sendRequest("http://localhost:8080/api/auth/signup", createPayload(usernameField, emailField, passwordField), errorLabel ,primaryStage);
+                sendRequest("http://localhost:8080/api/auth/signup",
+                        createPayload(usernameField, emailField, passwordField), errorLabel, primaryStage);
             } else {
                 if (!validateSignInForm(emailField, passwordField, errorLabel)) {
                     errorLabel.setVisible(true);
                     return;
                 }
-                sendRequest("http://localhost:8080/api/auth/login", createPayload(null ,emailField, passwordField), errorLabel,primaryStage);
+                sendRequest("http://localhost:8080/api/auth/login", createPayload(null, emailField, passwordField),
+                        errorLabel, primaryStage);
             }
         });
 
@@ -155,7 +156,7 @@ public class Main extends Application {
 
     // Validate Sign-Up Form
     private boolean validateSignUpForm(TextField usernameField, TextField emailField, PasswordField passwordField,
-                                       PasswordField confirmPasswordField, Label errorLabel) {
+            PasswordField confirmPasswordField, Label errorLabel) {
         if (usernameField.getText().isEmpty()) {
             errorLabel.setText("Username cannot be empty.");
             return false;
@@ -176,15 +177,17 @@ public class Main extends Application {
     }
 
     // Create Payload for API
-    private Map<String, String> createPayload(TextField usernameField, TextField emailField, PasswordField passwordField) {
+    private Map<String, String> createPayload(TextField usernameField, TextField emailField,
+            PasswordField passwordField) {
         Map<String, String> payload = new HashMap<>();
         payload.put("email", emailField.getText());
         payload.put("password", passwordField.getText());
-        if (usernameField != null) payload.put("username", usernameField.getText());
+        if (usernameField != null)
+            payload.put("userName", usernameField.getText());
         return payload;
     }
 
-    private void sendRequest(String urlString, Map<String, String> payload, Label errorLabel ,Stage primaryStage) {
+    private void sendRequest(String urlString, Map<String, String> payload, Label errorLabel, Stage primaryStage) {
         try {
             // Convert the payload to JSON
             ObjectMapper objectMapper = new ObjectMapper();
@@ -210,30 +213,30 @@ public class Main extends Application {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> response = mapper.readValue(
                         conn.getInputStream(),
-                        new TypeReference<Map<String, String>>() {}
-                );
+                        new TypeReference<Map<String, String>>() {
+                        });
 
                 System.out.println(response);
 
-
                 // Get user ID from response
                 String userId = response.get("id");
-                String username = response.get("username");
-
-//                 Launch the chat UI
-                Platform.runLater(() -> {
-                    primaryStage.close();
-                    GlobalChat chatApp = new GlobalChat(username,userId);
-                    Stage chatStage = new Stage();
-                    try {
-                        chatApp.start(chatStage);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                });
-            } else {
-                errorLabel.setText("Error: " + conn.getResponseMessage());
-                errorLabel.setVisible(true);
+                String userName = response.get("userName");
+                // lunch UI
+                if (userId != null && userName != null) {
+                    Platform.runLater(() -> {
+                        primaryStage.close();
+                        GlobalChat chatApp = new GlobalChat(userId, userName);
+                        Stage chatStage = new Stage();
+                        try {
+                            chatApp.start(chatStage);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                } else {
+                    errorLabel.setText("Error: Invalid user data received");
+                    errorLabel.setVisible(true);
+                }
             }
         } catch (Exception e) {
             errorLabel.setText("Error: Unable to connect to the server.");

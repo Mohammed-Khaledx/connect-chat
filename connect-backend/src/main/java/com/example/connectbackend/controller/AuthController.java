@@ -21,6 +21,8 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody User user) {
         try {
+            // Set the userName field from the username in the request
+            user.setUserName(user.getUserName());
             User registeredUser = authService.registerUser(user);
             return ResponseEntity.ok(registeredUser);
         } catch (Exception e) {

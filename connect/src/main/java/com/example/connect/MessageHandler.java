@@ -13,14 +13,14 @@
 //
 //// This class handles all message-related operations
 //public class MessageHandler {
-//    private final String username;
+//    private final String userName;
 //    private final String userId;
 //    // Added to store the user's ID
 //    private final GlobalChat.ChatView chatView;
 //    private final ObjectMapper objectMapper;
 //
-//    public MessageHandler(String username, String userId, GlobalChat.ChatView chatView) {
-//        this.username = username;
+//    public MessageHandler(String userName, String userId, GlobalChat.ChatView chatView) {
+//        this.userName = userName;
 //        this.userId = userId;  // Store user ID from authentication
 //        this.chatView = chatView;
 //        this.objectMapper = new ObjectMapper();
@@ -75,7 +75,7 @@
 //                    Platform.runLater(() -> {
 //                        // Add message to the chat view
 //                        chatView.addMessage(
-//                                username,
+//                                userName,
 //                                content,
 //                                LocalDateTime.now().toString()
 //                        );
@@ -117,20 +117,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageHandler {
-    private final String username;
     private final String userId;
+    private final String userName;
     private final GlobalChat.ChatView chatView;
     private final ObjectMapper objectMapper;
     private final ChatWebSocketClient webSocketClient;
 
-    public MessageHandler(String username, String userId, GlobalChat.ChatView chatView) {
-        this.username = username;
+    public MessageHandler(String userId, String userName, GlobalChat.ChatView chatView) {
         this.userId = userId;
+        this.userName = userName;
         this.chatView = chatView;
         this.objectMapper = new ObjectMapper();
 
         // Initialize WebSocket client
-        this.webSocketClient = new ChatWebSocketClient(userId, username, chatView);
+        this.webSocketClient = new ChatWebSocketClient(userId, userName, chatView);
 
         // Connect to WebSocket server
         this.webSocketClient.connect();
@@ -139,6 +139,7 @@ public class MessageHandler {
     private Map<String, Object> createMessageObject(String content) {
         Map<String, Object> message = new HashMap<>();
         message.put("senderId", userId);
+        message.put("userName" , userName);
         message.put("receiverId", null);
         message.put("content", content);
         message.put("timestamp", LocalDateTime.now().toString());
@@ -161,10 +162,10 @@ public class MessageHandler {
             // Send via WebSocket
             webSocketClient.send(jsonMessage);
 
-            // Show message in our chat view immediately
-            Platform.runLater(() -> {
-                chatView.addMessage(username, content, LocalDateTime.now().toString());
-            });
+            // // Show message in our chat view immediately
+            // Platform.runLater(() -> {
+            //     chatView.addMessage(userId,userName, content, LocalDateTime.now().toString());
+            // });
 
         } catch (Exception e) {
             Platform.runLater(() -> showError("Error sending message: " + e.getMessage()));

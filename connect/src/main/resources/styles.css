@@ -47,44 +47,102 @@
     -fx-border-width: 1;
 }
 
-
-
 .chat-view {
-    -fx-background-color: #2b2b2b;
+    -fx-background-color: #1E1E1E;
+    -fx-padding: 10;
+}
+
+.messages-container {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
 }
 
 .message-box {
-    -fx-background-color: #3c3f41;
     -fx-padding: 10;
     -fx-spacing: 5;
-    -fx-background-radius: 5;
+    -fx-max-width: 80%;
+    -fx-background-radius: 15;
+}
+
+.message-box.sent {
+    -fx-background-color: #0B93F6;
+    -fx-alignment: CENTER-RIGHT;
+}
+
+.message-box.received {
+    -fx-background-color: #E5E5EA;
+    -fx-alignment: CENTER-LEFT;
 }
 
 .sender-name {
-    -fx-fill: #9876aa;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
+    -fx-opacity: 0.8;
+}
+
+.sent .sender-name {
+    -fx-fill: #FFFFFF;
+    -fx-text-alignment: right;
+
+}
+
+.received .sender-name {
+    -fx-fill: #000000;
+    -fx-text-alignment: left;
+
 }
 
 .message-content {
-    -fx-fill: white;
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+.sent .message-content {
+    -fx-fill: #FFFFFF;
+}
+
+.received .message-content {
+    -fx-fill: #000000;
 }
 
 .timestamp {
-    -fx-fill: #808080;
-    -fx-font-size: 10;
+    -fx-font-size: 10px;
+    -fx-opacity: 0.7;
+}
+
+.sent .timestamp {
+    -fx-fill: #FFFFFF;
+}
+
+.received .timestamp {
+    -fx-fill: #000000;
 }
 
 .message-input {
-    -fx-background-color: #3c3f41;
+    -fx-background-color: #2D2D2D;
     -fx-text-fill: white;
-    -fx-prompt-text-fill: gray;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 10 15;
 }
 
 .send-button {
-    -fx-background-color: #365880;
+    -fx-background-color: #0B93F6;
     -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
 }
 
 .send-button:hover {
-    -fx-background-color: #4e78a9;
+    -fx-background-color: #0A84E1;
 }

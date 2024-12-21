@@ -16,15 +16,15 @@ public class ChatWebSocketClient extends WebSocketClient {
 
     private final ObjectMapper objectMapper;
     private final String userId;
-    private final String username;
+    private final String userName;
     private boolean isOpen;
 
-    public ChatWebSocketClient(String userId, String username, GlobalChat.ChatView chatView) {
+    public ChatWebSocketClient(String userId, String userName, GlobalChat.ChatView chatView) {
         // Connect to your WebSocket endpoint
-        super(URI.create("ws://localhost:8080/chat?userId=" + userId + "&username=" + username));
+        super(URI.create("ws://localhost:8080/chat?userId=" + userId + "&userName=" + userName));
         this.chatView = chatView;
         this.userId = userId;
-        this.username = username;
+        this.userName = userName;
         this.objectMapper = new ObjectMapper();
 
         // Configure ObjectMapper for dates
@@ -43,42 +43,47 @@ public class ChatWebSocketClient extends WebSocketClient {
         try {
             // Parse the message as a single Message object
             Map<String, Object> messageData = objectMapper.readValue(message, Map.class);
-            
+            System.out.println("Received message: " + messageData); // Debug print
+
             // Convert timestamp array to string format
             Object timestamp = messageData.get("timestamp");
             if (timestamp instanceof List) {
                 List<?> timestampList = (List<?>) timestamp;
                 // Format: [2024,12,21,9,53,4,103178041]
                 String formattedTimestamp = String.format("%d-%02d-%02dT%02d:%02d:%02d",
-                        ((Number)timestampList.get(0)).intValue(),
-                        ((Number)timestampList.get(1)).intValue(),
-                        ((Number)timestampList.get(2)).intValue(),
-                        ((Number)timestampList.get(3)).intValue(),
-                        ((Number)timestampList.get(4)).intValue(),
-                        ((Number)timestampList.get(5)).intValue());
+                        ((Number) timestampList.get(0)).intValue(),
+                        ((Number) timestampList.get(1)).intValue(),
+                        ((Number) timestampList.get(2)).intValue(),
+                        ((Number) timestampList.get(3)).intValue(),
+                        ((Number) timestampList.get(4)).intValue(),
+                        ((Number) timestampList.get(5)).intValue());
                 messageData.put("timestamp", formattedTimestamp);
             }
-    
+
             handleSingleMessage(messageData);
         } catch (Exception e) {
             System.err.println("Error processing message: " + e.getMessage());
             e.printStackTrace();
         }
     }
-    
+
     private void handleSingleMessage(Map<String, Object> messageData) {
         String senderId = (String) messageData.get("senderId");
+        String senderName = (String) messageData.get("userName");
         String content = (String) messageData.get("content");
         String timestamp = (String) messageData.get("timestamp");
-    
+
         // Update UI on JavaFX thread
         Platform.runLater(() -> {
             // Don't display our own messages twice since MessageHandler already shows them
-            if (!senderId.equals(userId)) {
-                chatView.addMessage(senderId, content, timestamp);
-            }
+            // if (!senderId.equals(userId)
+
+            // ) {
+                chatView.addMessage(senderId, senderName, content, timestamp);
+            // }
         });
     }
+
     @Override
     public void onClose(int code, String reason, boolean remote) {
         System.out.println("WebSocket Connection Closed: " + reason);

@@ -28,50 +28,39 @@ public class MessageFetcher {
     public void fetchMessages() {
         new Thread(() -> {
             try {
-                // Connect to your messages endpoint
                 URL url = new URL("http://localhost:8080/api/messages/global");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
-
-                // Read the response
+    
                 if (conn.getResponseCode() == 200) {
-                    // Parse the JSON response into a List of messages
                     List<Map<String, Object>> messages = objectMapper.readValue(
-                            conn.getInputStream(),
-                            new TypeReference<List<Map<String, Object>>>() {}
+                        conn.getInputStream(),
+                        new TypeReference<List<Map<String, Object>>>() {}
                     );
-
-                    // Update the UI with the fetched messages
+    
                     Platform.runLater(() -> {
-                        // Clear existing messages before adding fetched ones
                         chatView.clearMessages();
-
-                        // Add each message to the chat view
+                        // Only add messages that were sent before the connection
                         for (Map<String, Object> message : messages) {
-                            String sender = (String) message.get("senderId");
-                            String content = (String) message.get("content");
-                            String timestamp = formatTimestamp((String) message.get("timestamp"));
+                            System.out.println("Message data: " + message);
 
-                            chatView.addMessage(sender, content, timestamp);
-                        }
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        try {
-                            showError(
-                                    "Failed to fetch messages. Server returned: " + conn.getResponseCode()
-                            );
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            String timestamp = (String) message.get("timestamp");
+                            LocalDateTime messageTime = LocalDateTime.parse(timestamp);
+                            
+                            // Only show messages from before the connection
+                            if (messageTime.isBefore(lastFetchTime)) {
+
+                                System.out.println(message);
+                                String senderId = (String) message.get("senderId");
+                                String userName = (String) message.get("userName");
+                                String content = (String) message.get("content");
+                                chatView.addMessage(senderId, userName, content, formatTimestamp(timestamp));
+                            }
                         }
                     });
                 }
-
             } catch (Exception e) {
-                Platform.runLater(() -> showError(
-                        "Error fetching messages: " + e.getMessage()
-                ));
-                e.printStackTrace();
+                Platform.runLater(() -> showError("Error fetching messages: " + e.getMessage()));
             }
         }).start();
     }

@@ -34,58 +34,74 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         try {
-            // Try multiple ways to get the userId
-            String senderId = null;
-            // Try from URI query parameters
-            if (session.getUri() != null && session.getUri().getQuery() != null) {
-                senderId = getUserIdFromSession(session.getUri().getQuery(), "userId");
-            }
+            // Extract userId and username from query parameters
+            String query = session.getUri().getQuery();
+            String userId = extractQueryParameter(query, "userId");
+            String userName = extractQueryParameter(query, "userName");
+
             // Get the query parameters from the URI
             // String query = session.getUri().getQuery();
             System.out.println(session.getUri().getQuery());
             // String userId = extractUserId(query); // Add this helper method
 
             // String senderId = getUserIdFromSession(session);
-            if (senderId != null) {
-                sessions.put(senderId, session);
-                logger.info("User {} connected. Total sessions: {}", senderId, sessions.size());
+            if (userId != null && userName != null) {
+                sessions.put(userId, session);
+                logger.info("User {} connected. Total sessions: {}", userId, userName, sessions.size());
 
                 // Create and broadcast a connection status message
                 Message statusMessage = new Message();
-                statusMessage.setSenderId(senderId);
+                statusMessage.setSenderId(userId);
+                statusMessage.setUserName(userName);
                 statusMessage.setGlobal(true);
                 statusMessage.setContent("USER_CONNECTED");
                 statusMessage.setTimestamp(LocalDateTime.now());
 
                 broadcastGlobalMessage(statusMessage);
-                logger.info("User {} connected. Total active sessions: {}", senderId, sessions.size());
+            } else {
+                logger.error("Connection attempt without userId or userName");
+                session.close();
             }
         } catch (Exception e) {
             logger.error("Error during connection establishment", e);
         }
     }
 
+    private String extractQueryParameter(String query, String paramName) {
+        if (query != null) {
+            String[] pairs = query.split("&");
+            for (String pair : pairs) {
+                String[] keyValue = pair.split("=");
+                if (keyValue.length == 2 && keyValue[0].equals(paramName)) {
+                    return keyValue[1];
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) {
         try {
-            String senderId = null;
-            // Try from URI query parameters
-            if (session.getUri() != null && session.getUri().getQuery() != null) {
-                senderId = getUserIdFromSession(session.getUri().getQuery(), "userId");
-            }
-            if (senderId == null) {
+            // Extract userId and username from query parameters
+            String query = session.getUri().getQuery();
+            String userId = extractQueryParameter(query, "userId");
+            String userName = extractQueryParameter(query, "userName");
+
+            if (userId == null) {
                 logger.warn("Received message from session without sender ID");
                 return;
             }
 
             Message chatMessage = parseAndValidateMessage(textMessage.getPayload());
             if (chatMessage == null) {
-                sendErrorToUser(senderId, "Invalid message format");
+                sendErrorToUser(userId, "Invalid message format");
                 return;
             }
 
             // Ensure sender ID is set correctly
-            chatMessage.setSenderId(senderId);
+            chatMessage.setSenderId(userId);
+            chatMessage.setUserName(userName);
 
             // Set timestamp if not already set
             if (chatMessage.getTimestamp() == null) {
@@ -104,7 +120,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             }
 
             logger.debug("Message handled for sender: {}, global: {}",
-                    senderId, savedMessage.isGlobal());
+                    userId, savedMessage.isGlobal());
 
         } catch (Exception e) {
             logger.error("Error handling message", e);
@@ -119,23 +135,24 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         try {
-            String senderId = null;
-            // Try from URI query parameters
-            if (session.getUri() != null && session.getUri().getQuery() != null) {
-                senderId = getUserIdFromSession(session.getUri().getQuery(), "userId");
-            }
-            if (senderId != null) {
-                sessions.remove(senderId);
+            // Extract userId and username from query parameters
+            String query = session.getUri().getQuery();
+            String userId = extractQueryParameter(query, "userId");
+            String userName = extractQueryParameter(query, "userName");
+           
+            if (userId != null) {
+                sessions.remove(userId);
 
                 // Create and broadcast a disconnection status message
                 Message statusMessage = new Message();
-                statusMessage.setSenderId(senderId);
+                statusMessage.setSenderId(userId);
+                statusMessage.setUserName(userName);
                 statusMessage.setGlobal(true);
                 statusMessage.setContent("USER_DISCONNECTED");
                 statusMessage.setTimestamp(LocalDateTime.now());
 
                 broadcastGlobalMessage(statusMessage);
-                logger.info("User {} disconnected. Remaining sessions: {}", senderId, sessions.size());
+                logger.info("User {} disconnected. Remaining sessions: {}", userName, sessions.size());
             }
         } catch (Exception e) {
             logger.error("Error during connection closure", e);
@@ -214,19 +231,19 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private String getUserIdFromSession(String query, String paramName) {
+    // private String getUserIdFromSession(String query, String paramName) {
 
-        if (query == null)
-            return null;
-        String[] pairs = query.split("&");
-        for (String pair : pairs) {
-            String[] keyValue = pair.split("=");
-            if (keyValue.length == 2 && keyValue[0].equals(paramName)) {
-                return keyValue[1];
-            }
-        }
-        return null;
-    }
+    //     if (query == null)
+    //         return null;
+    //     String[] pairs = query.split("&");
+    //     for (String pair : pairs) {
+    //         String[] keyValue = pair.split("=");
+    //         if (keyValue.length == 2 && keyValue[0].equals(paramName)) {
+    //             return keyValue[1];
+    //         }
+    //     }
+    //     return null;
+    // }
 
     private Message parseAndValidateMessage(String payload) {
         try {
