@@ -1,0 +1,48 @@
+/* General background for the app */
+.root {
+    -fx-background-color: #121212; /* Dark background */
+}
+
+/* Label styling */
+.label {
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+    -fx-text-fill: white;
+}
+
+/* TextField and PasswordField styling */
+.text-field, .password-field {
+    -fx-background-color: #1e1e1e; /* Darker input fields */
+    -fx-text-fill: white;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-color: #303030;
+    -fx-padding: 8;
+}
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #4caf50; /* Blue-green focus effect */
+    -fx-background-color: #1c1c1c;
+}
+
+/* Button styling */
+.button {
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 8 16;
+}
+.button:hover {
+    -fx-background-color: #4caf50; /* Blue-green hover */
+}
+.button:pressed {
+    -fx-background-color: #ff5252; /* Red pressed effect */
+}
+
+/* Sign-In and Sign-Up Button Widths */
+.button:focused {
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1;
+}

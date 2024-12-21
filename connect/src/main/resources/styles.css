@@ -1,0 +1,90 @@
+/* General background for the app */
+.root {
+    -fx-background-color: #121212; /* Dark background */
+}
+
+/* Label styling */
+.label {
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+    -fx-text-fill: white;
+}
+
+/* TextField and PasswordField styling */
+.text-field, .password-field {
+    -fx-background-color: #1e1e1e; /* Darker input fields */
+    -fx-text-fill: white;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-color: #303030;
+    -fx-padding: 8;
+}
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #d8c91f; /* Blue-green focus effect */
+    -fx-background-color: #1c1c1c;
+}
+
+/* Button styling */
+.button {
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 8 16;
+}
+.button:hover {
+    -fx-background-color: #d8c91f; /* Blue-green hover */
+}
+.button:pressed {
+    -fx-background-color: #827704; /* Red pressed effect */
+}
+
+/* Sign-In and Sign-Up Button Widths */
+.button:focused {
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1;
+}
+
+
+
+.chat-view {
+    -fx-background-color: #2b2b2b;
+}
+
+.message-box {
+    -fx-background-color: #3c3f41;
+    -fx-padding: 10;
+    -fx-spacing: 5;
+    -fx-background-radius: 5;
+}
+
+.sender-name {
+    -fx-fill: #9876aa;
+    -fx-font-weight: bold;
+}
+
+.message-content {
+    -fx-fill: white;
+}
+
+.timestamp {
+    -fx-fill: #808080;
+    -fx-font-size: 10;
+}
+
+.message-input {
+    -fx-background-color: #3c3f41;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: gray;
+}
+
+.send-button {
+    -fx-background-color: #365880;
+    -fx-text-fill: white;
+}
+
+.send-button:hover {
+    -fx-background-color: #4e78a9;
+}
