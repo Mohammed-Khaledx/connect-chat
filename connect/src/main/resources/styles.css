@@ -146,3 +146,19 @@
 .send-button:hover {
     -fx-background-color: #0A84E1;
 }
+
+.ai-button {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.ai-button:hover {
+    -fx-background-color: #357abd;
+}
+
+.message-box.ai {
+    -fx-background-color: #6a5acd;
+}

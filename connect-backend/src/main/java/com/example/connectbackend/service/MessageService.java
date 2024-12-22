@@ -19,7 +19,7 @@ public class MessageService {
     }
 
     public List<Message> getGlobalMessages() {
-        return messageRepository.findByIsGlobalOrderByTimestampDesc(true);
+        return messageRepository.findByIsGlobalOrderByTimestamp(true);
     }
 
     public List<Message> getPrivateMessages(String senderId, String receiverId) {

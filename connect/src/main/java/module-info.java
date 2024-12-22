@@ -11,6 +11,9 @@ module com.example.connect {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.net.http;
+    exports com.example.connect.model; // Add this line
+    opens com.example.connect.model to com.fasterxml.jackson.databind; // Add this line
+
     requires com.google.gson;
 //    requires Java.WebSocket;
     requires com.fasterxml.jackson.datatype.jsr310;

@@ -43,7 +43,7 @@ public class ChatWebSocketClient extends WebSocketClient {
         try {
             // Parse the message as a single Message object
             Map<String, Object> messageData = objectMapper.readValue(message, Map.class);
-            System.out.println("Received message: " + messageData); // Debug print
+            // System.out.println("Received message: " + messageData); // Debug print
 
             // Convert timestamp array to string format
             Object timestamp = messageData.get("timestamp");

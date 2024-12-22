@@ -41,7 +41,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
             // Get the query parameters from the URI
             // String query = session.getUri().getQuery();
-            System.out.println(session.getUri().getQuery());
+            // System.out.println(session.getUri().getQuery());
             // String userId = extractUserId(query); // Add this helper method
 
             // String senderId = getUserIdFromSession(session);
