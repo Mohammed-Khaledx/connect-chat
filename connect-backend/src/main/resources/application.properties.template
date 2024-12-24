@@ -1,4 +1,4 @@
 spring.application.name=connect-backend
 spring.data.mongodb.uri=mongodb://localhost:27017/chatapp
 server.port=8080
-gemini.api.key=AIzaSyA69VIpu0n1EqSQQswO866NaOHlir1S-L0
+gemini.api.key=YOUR_GEMINI_API_KEY_HERE
