@@ -26,20 +26,29 @@ connect/
 │   │   ├── Main.java (Entry point, authentication)
 │   │   ├── GlobalChat.java (Chat interface)
 │   │   ├── MessageHandler.java (Message processing)
+|   |   ├── MessageFetcher.java (Message fetching)
 │   │   └── model/
-│   │       └── Message.java (Frontend message model)
+│   │   |    └── Message.java (Frontend message model)
+|   |   └── websocket/
+│   │       └── chatWebsocketClient.java (Frontend socket client)
 │   └── resources/
 │       └── styles.css (Application styling)
 │
 └── connect-backend/ (Backend)
     └── src/main/java/com/example/connectbackend/
+        ├── ConnectBackendApplication.java
         ├── controller/
         │   ├── AuthController.java
+        │   ├── MessageConroller.java
+        │   ├── UserController.java
         │   └── AIController.java
         ├── model/
-        │   └── Message.java
+        │   |── Message.java
+        |   └── User.java
         ├── service/
         │   ├── AIService.java
+        │   ├── UserService.java
+        │   ├── AuthService.java
         │   └── MessageService.java
         └── websocket/
             └── ChatWebSocketHandler.java
