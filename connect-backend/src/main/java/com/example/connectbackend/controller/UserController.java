@@ -17,7 +17,7 @@ public class UserController {
     public ResponseEntity<List<String>> getUsersList() {
         try {
             List<String> usernames = userService.getAllUsers();
-            System.out.println("Returning users: " + usernames); // Debug output
+            // System.out.println("Returning users: " + usernames); // Debug output
             return ResponseEntity.ok(usernames);
         } catch (Exception e) {
             System.err.println("Error getting users: " + e.getMessage());

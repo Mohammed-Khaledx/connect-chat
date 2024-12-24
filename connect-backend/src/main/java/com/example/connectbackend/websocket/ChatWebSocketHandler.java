@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatWebSocketHandler extends TextWebSocketHandler {
@@ -41,7 +40,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
             // Get the query parameters from the URI
             // String query = session.getUri().getQuery();
-            System.out.println(session.getUri().getQuery());
+            // System.out.println(session.getUri().getQuery());
             // String userId = extractUserId(query); // Add this helper method
 
             // String senderId = getUserIdFromSession(session);

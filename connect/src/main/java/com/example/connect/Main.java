@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -216,7 +215,7 @@ public class Main extends Application {
                         new TypeReference<Map<String, String>>() {
                         });
 
-                System.out.println(response);
+                // System.out.println(response);
 
                 // Get user ID from response
                 String userId = response.get("id");

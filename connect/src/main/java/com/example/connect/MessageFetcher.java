@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -42,7 +41,7 @@ public class MessageFetcher {
                         chatView.clearMessages();
                         // Only add messages that were sent before the connection
                         for (Map<String, Object> message : messages) {
-                            System.out.println("Message data: " + message);
+                            // System.out.println("Message data: " + message);
 
                             String timestamp = (String) message.get("timestamp");
                             LocalDateTime messageTime = LocalDateTime.parse(timestamp);
@@ -50,7 +49,7 @@ public class MessageFetcher {
                             // Only show messages from before the connection
                             if (messageTime.isBefore(lastFetchTime)) {
 
-                                System.out.println(message);
+                                // System.out.println(message);
                                 String senderId = (String) message.get("senderId");
                                 String userName = (String) message.get("userName");
                                 String content = (String) message.get("content");

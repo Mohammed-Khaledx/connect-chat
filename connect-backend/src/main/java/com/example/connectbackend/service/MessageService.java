@@ -4,7 +4,6 @@ package com.example.connectbackend.service;
 import com.example.connectbackend.model.Message;
 import com.example.connectbackend.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class MessageService {
     }
 
     public List<Message> getGlobalMessages() {
-        return messageRepository.findByIsGlobalOrderByTimestampDesc(true);
+        return messageRepository.findByIsGlobalOrderByTimestamp(true);
     }
 
     public List<Message> getPrivateMessages(String senderId, String receiverId) {

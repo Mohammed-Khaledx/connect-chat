@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.List;
@@ -43,7 +42,7 @@ public class ChatWebSocketClient extends WebSocketClient {
         try {
             // Parse the message as a single Message object
             Map<String, Object> messageData = objectMapper.readValue(message, Map.class);
-            System.out.println("Received message: " + messageData); // Debug print
+            // System.out.println("Received message: " + messageData); // Debug print
 
             // Convert timestamp array to string format
             Object timestamp = messageData.get("timestamp");
