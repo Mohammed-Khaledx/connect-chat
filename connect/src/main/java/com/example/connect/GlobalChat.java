@@ -1,18 +1,14 @@
 package com.example.connect;
 
-import com.example.connect.MessageHandler;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import com.example.connect.model.Message;
 
@@ -24,7 +20,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GlobalChat extends Application {
@@ -260,16 +255,7 @@ public class GlobalChat extends Application {
             messagesContainer.getChildren().clear();
         }
 
-        // public void addAIButton(Button aiButton) {
-        //     // Find the input area HBox and add the AI button
-        //     for (Node node : getChildren()) {
-        //         if (node instanceof HBox) {
-        //             HBox inputArea = (HBox) node;
-        //             inputArea.getChildren().add(aiButton);
-        //             break;
-        //         }
-        //     }
-        // }
+
 
         // handele AI
         public void handleAIQuestion(String question) {

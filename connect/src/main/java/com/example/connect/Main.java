@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

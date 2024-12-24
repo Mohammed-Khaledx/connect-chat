@@ -4,7 +4,6 @@ package com.example.connectbackend.service;
 import com.example.connectbackend.model.Message;
 import com.example.connectbackend.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
