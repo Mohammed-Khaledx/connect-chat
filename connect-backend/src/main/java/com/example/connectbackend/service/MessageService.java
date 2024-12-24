@@ -25,10 +25,4 @@ public class MessageService {
         return messageRepository.findBySenderIdAndReceiverIdOrderByTimestampDesc(senderId, receiverId);
     }
 
-//    Message saveMessage(Message message);
-//    Page<Message> getGlobalMessages(PageRequest pageRequest);
-//    Page<Message> getGlobalMessagesBefore(LocalDateTime before, PageRequest pageRequest);
-//    Page<Message> getPrivateMessages(String senderId, String receiverId, PageRequest pageRequest);
-//    Page<Message> getPrivateMessagesBefore(String senderId, String receiverId, LocalDateTime before, PageRequest pageRequest);
-//    Page<Message> getUserMessages(String userId, PageRequest pageRequest);
 }
