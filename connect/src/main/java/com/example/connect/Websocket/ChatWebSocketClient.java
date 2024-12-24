@@ -37,6 +37,7 @@ public class ChatWebSocketClient extends WebSocketClient {
 
     }
 
+    // on resiving the message
     @Override
     public void onMessage(String message) {
         try {

@@ -82,52 +82,37 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) {
         try {
-            // Extract userId and username from query parameters
             String query = session.getUri().getQuery();
             String userId = extractQueryParameter(query, "userId");
             String userName = extractQueryParameter(query, "userName");
-
-            if (userId == null) {
-                logger.warn("Received message from session without sender ID");
-                return;
-            }
-
+    
             Message chatMessage = parseAndValidateMessage(textMessage.getPayload());
             if (chatMessage == null) {
                 sendErrorToUser(userId, "Invalid message format");
                 return;
             }
-
-            // Ensure sender ID is set correctly
-            chatMessage.setSenderId(userId);
-            chatMessage.setUserName(userName);
-
+    
+            // Only set sender info if not already set (preserve AI sender info)
+            if (chatMessage.getSenderId() == null || !chatMessage.getSenderId().equals("AI_ASSISTANT")) {
+                chatMessage.setSenderId(userId);
+                chatMessage.setUserName(userName);
+            }
+    
             // Set timestamp if not already set
             if (chatMessage.getTimestamp() == null) {
                 chatMessage.setTimestamp(LocalDateTime.now());
             }
-
-            // Save message to database
+    
             Message savedMessage = messageService.saveMessage(chatMessage);
-
-            // Handle message routing based on type (global or private)
+    
             if (savedMessage.isGlobal()) {
                 broadcastGlobalMessage(savedMessage);
             } else {
-                // For private messages, send to specific receiver
                 sendPrivateMessage(savedMessage);
             }
-
-            logger.debug("Message handled for sender: {}, global: {}",
-                    userId, savedMessage.isGlobal());
-
+    
         } catch (Exception e) {
             logger.error("Error handling message", e);
-            try {
-                session.sendMessage(new TextMessage(createErrorMessage("Internal server error")));
-            } catch (IOException ex) {
-                logger.error("Error sending error message", ex);
-            }
         }
     }
 

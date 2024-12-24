@@ -15,6 +15,10 @@ public class MessageHandler {
     private final ObjectMapper objectMapper;
     private final ChatWebSocketClient webSocketClient;
 
+    public ChatWebSocketClient getWebSocketClient() {
+        return webSocketClient;
+    }
+    
     public MessageHandler(String userId, String userName, GlobalChat.ChatView chatView) {
         this.userId = userId;
         this.userName = userName;
