@@ -1,309 +1,80 @@
-# Connect - Real-time Chat Application with AI Integration
+# Connect - Real-time Chat Application with AI Assistance
+
+[![Java](https://img.shields.io/badge/Java-21+-orange)](https://www.oracle.com/java/technologies/javase-jdk21-downloads.html)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.1.0-brightgreen)](https://spring.io/projects/spring-boot)
+[![JavaFX](https://img.shields.io/badge/JavaFX-21-blue)](https://openjfx.io/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4.4+-green)](https://www.mongodb.com/)
 
 ## Overview
-Connect is a full-stack chat application that combines real-time messaging with AI-powered responses using Google's Gemini API. Built with JavaFX (frontend) and Spring Boot (backend), it features user authentication, global chat, and AI assistance.
 
-## Features
-- User authentication (signup/login)
-- Real-time global chat
-- AI-powered responses via Gemini
-- Message persistence using MongoDB
-- Dark theme UI
-- WebSocket communication
+Connect is a robust, full-stack desktop chat application designed for seamless real-time communication enhanced by AI assistance. This project showcases proficiency in full-stack Java development, real-time communication protocols, and integration with external APIs. It utilizes JavaFX for a rich desktop user interface, Spring Boot for a scalable and maintainable backend, WebSockets for instant messaging, and Google's Gemini API for intelligent, context-aware responses.
+
+## Key Features
+
+*   **Real-time Bi-directional Messaging:** Experience instantaneous message delivery and updates using WebSockets, ensuring seamless communication.
+*   **AI-Powered Assistance:** Leverage the power of Google's Gemini API to receive intelligent responses, suggestions, and assistance within the chat interface.
+*   **User Authentication:** Secure user accounts with robust signup and login functionality, protecting user data and privacy.
+*   **Message Persistence:** Messages are stored persistently using MongoDB, ensuring no data loss and allowing users to access their chat history.
+*   **User-Friendly Interface:** Enjoy an intuitive and responsive desktop interface built with JavaFX, featuring a modern dark theme for enhanced usability and visual appeal.
 
 ## Tech Stack
-- Frontend: JavaFX
-- Backend: Spring Boot
-- Database: MongoDB
-- Real-time: WebSocket
-- AI: Google Gemini API
 
-## Project Structure
-```
-connect/
-├── connect/ (Frontend)
-│   ├── src/main/java/com/example/connect/
-│   │   ├── Main.java (Entry point, authentication)
-│   │   ├── GlobalChat.java (Chat interface)
-│   │   ├── MessageHandler.java (Message processing)
-|   |   ├── MessageFetcher.java (Message fetching)
-│   │   └── model/
-│   │   |    └── Message.java (Frontend message model)
-|   |   └── websocket/
-│   │       └── chatWebsocketClient.java (Frontend socket client)
-│   └── resources/
-│       └── styles.css (Application styling)
-│
-└── connect-backend/ (Backend)
-    └── src/main/java/com/example/connectbackend/
-        ├── ConnectBackendApplication.java
-        ├── controller/
-        │   ├── AuthController.java
-        │   ├── MessageConroller.java
-        │   ├── UserController.java
-        │   └── AIController.java
-        ├── model/
-        │   |── Message.java
-        |   └── User.java
-        ├── service/
-        │   ├── AIService.java
-        │   ├── UserService.java
-        │   ├── AuthService.java
-        │   └── MessageService.java
-        └── websocket/
-            └── ChatWebSocketHandler.java
-```
+*   **Frontend:** JavaFX
+*   **Backend:** Spring Boot (Java)
+*   **Database:** MongoDB
+*   **Real-time Communication:** WebSockets
+*   **AI Integration:** Google Gemini API
+*   **Build Tool:** Maven
 
-## Setup Instructions
+## Architecture
+
+Connect employs a layered architecture to promote modularity, maintainability, and scalability:
+
+*   **Presentation Layer (Frontend - JavaFX):** Responsible for user interaction, rendering the user interface, and handling communication with the backend.
+*   **Application Layer (Backend - Spring Boot):** Contains the business logic, manages data access, and orchestrates interactions between different services.
+*   **Data Access Layer (Backend - Spring Data MongoDB):** Handles database interactions, providing an abstraction layer for data persistence.
+*   **External API Integration (Backend):** Integrates with Google's Gemini API for AI-powered responses.
+
+## Setup and Installation
+
 ### Prerequisites
-- Java 21+
-- Maven
-- MongoDB
-- Gemini API key
 
-### Backend Configuration
-Create `application.properties`:
-```properties
-spring.application.name=connect-backend
-spring.data.mongodb.uri=mongodb://localhost:27017/chatapp
-server.port=8080
-gemini.api.key=YOUR_GEMINI_API_KEY
-```
+*   Java 21+ JDK
+*   Apache Maven
+*   MongoDB (running locally or a cloud instance)
+*   A Google Cloud Project with the Gemini API enabled and a valid API key.
 
-### Build & Run
-```bash
-# Backend
-cd connect-backend
-mvn spring-boot:run
+### Backend Setup
 
-# Frontend
-cd connect
-mvn javafx:run
-```
+1.  Navigate to the `connect-backend` directory: `cd connect-backend`
+2.  Create a file named `application.properties` in `src/main/resources`.
+3.  Configure the following properties:
 
-## Code Examples
+    ```properties
+    spring.data.mongodb.uri=mongodb://localhost:27017/chatapp  # Your MongoDB connection string
+    server.port=8080                                         # Backend server port
+    gemini.api.key=YOUR_GEMINI_API_KEY                     # Your Google Gemini API key
+    ```
 
-### Authentication
-```java
-// Main.java handles login/signup
-private void handleLogin(String email, String password) {
-    // Authenticate user via backend
-    // On success, launch chat interface
-}
-```
+### Frontend Setup
 
-### Real-time Chat
-```java
-// GlobalChat.java manages chat interface
-public class GlobalChat extends Application {
-    private final String userName;
-    private final String userId;
-    private ChatView chatView;
+1.  Navigate to the `connect` directory: `cd connect`
 
-    public class ChatView extends VBox {
-        private final VBox messagesContainer;
-        private final TextField messageInput;
-        private final Button aiButton;
+### Build and Run
 
-        // Message display
-        public void addMessage(String senderId, String senderName, String content, String timestamp) {
-            VBox messageBox = new VBox(5);
-            boolean isSentByCurrentUser = senderId.equals(userId);
-            messageBox.getStyleClass().addAll("message-box", 
-                isSentByCurrentUser ? "sent" : "received");
-            
-            // Add message content
-            Text senderText = new Text(isSentByCurrentUser ? "You" : senderName);
-            Text contentText = new Text(content);
-            Text timestampText = new Text(timestamp);
-            messageBox.getChildren().addAll(senderText, contentText, timestampText);
-        }
-
-        public void handleAIQuestion(String question) {
-            try {
-                Map<String, String> requestData = new HashMap<>();
-                requestData.put("question", question);
-                requestData.put("userId", userId);
-                
-                String jsonPayload = objectMapper.writeValueAsString(requestData);
-                
-                // Make async API call
-                new Thread(() -> {
-                    try {
-                        URL url = new URL("http://localhost:8080/api/ai/ask");
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        // Send request and handle response
-                        if (conn.getResponseCode() == 200) {
-                            Message response = mapper.readValue(
-                                conn.getInputStream(), 
-                                Message.class
-                            );
-                            Platform.runLater(() -> {
-                                addMessage(
-                                    "AI_ASSISTANT",
-                                    "AI Assistant",
-                                    response.getContent(),
-                                    LocalDateTime.now().toString()
-                                );
-                            });
-                        }
-                    } catch (Exception e) {
-                        showError("AI request failed: " + e.getMessage());
-                    }
-                }).start();
-            } catch (Exception e) {
-                showError("Error processing question: " + e.getMessage());
-            }
-        }
-    }
-}
-```
-
-### AI Integration
-```java
-// AIService.java processes AI requests
-@Service
-public class AIService {
-    @Value("${gemini.api.key}")
-    private String apiKey;
-
-    public Message processAIQuestion(String question) {
-        // Call Gemini API
-        String aiResponse = callGeminiAPI(question);
-        
-        // Create response message
-        Message responseMsg = new Message();
-        responseMsg.setSenderId("AI_ASSISTANT");
-        responseMsg.setUserName("AI Assistant");
-        responseMsg.setContent(aiResponse);
-        
-        return messageService.saveMessage(responseMsg);
-    }
-}
-```
-
-## Security Considerations
-- **API Keys**
-  - Store Gemini API key in application.properties
-  - Add properties file to .gitignore
-  - Use environment variables in production
-- **Authentication**
-  - Password hashing
-  - Session management
-  - CORS configuration
-- **WebSocket Security**
-  - Authentication check on connection
-  - Message validation
-
-## Development Guidelines
-- **Code Structure**
-  - Separate concerns (UI/business logic)
-  - Use proper packaging
-  - Follow naming conventions
-- **Best Practices**
-  - Add comments for complex logic
-  - Handle exceptions properly
-  - Log important events
-  - Use dependency injection
-- **Testing**
-  - Unit tests for services
-  - Integration tests for controllers
-  - UI tests for frontend
-
-## Common Issues & Solutions
-```java
-// WebSocket Connection
-ws://localhost:8080/chat
-
-// MongoDB Connection
-mongodb://localhost:27017/chatapp
-
-// JavaFX UI Thread
-Platform.runLater(() -> {
-    // Update UI here
-});
-```
+1.  Start the backend server: `cd connect-backend && mvn spring-boot:run`
+2.  Start the frontend application: `cd connect && mvn javafx:run`
 
 ## Future Enhancements
-- Private messaging
-- File sharing
-- Message history
-- User profiles
-- Rich text formatting
-- Mobile app version
+
+*   Private messaging functionality
+*   File sharing capabilities
+*   Enhanced message history management
+*   User profiles with customizable avatars
+*   Rich text formatting within messages
+*   Mobile application development
 
 ## Contributing
-1. Fork the repository
-2. Create feature branch
-3. Follow code style
-4. Add tests
-5. Submit pull request
 
-## License
-MIT License
+Contributions are welcome! Please fork the repository and submit pull requests.
 
-## Architecture Overview
-
-### Authentication Flow
-1. User signs up/logs in via [`Main.java`](connect/src/main/java/com/example/connect/Main.java):
-```java
-// Authentication request handling
-private void sendRequest(String urlString, Map<String, String> payload, Label errorLabel, Stage primaryStage) {
-    try {
-        // Send auth request to backend
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonPayload = objectMapper.writeValueAsString(payload);
-        
-        // On successful auth, launch chat
-        if (responseCode == 200) {
-            Map<String, String> response = mapper.readValue(conn.getInputStream(),
-                new TypeReference<Map<String, String>>() {});
-            String userId = response.get("id");
-            String userName = response.get("userName");
-            
-            // Launch chat interface
-            Platform.runLater(() -> {
-                GlobalChat chatApp = new GlobalChat(userId, userName);
-                chatApp.start(new Stage());
-            });
-        }
-    } catch (Exception e) {
-        showError("Authentication failed: " + e.getMessage());
-    }
-}
-```
-
-### Styling
-Create `styles.css`:
-```css
-.root {
-    -fx-background-color: #121212;
-}
-
-.message-box.sent {
-    -fx-background-color: #0B93F6;
-    -fx-alignment: CENTER-RIGHT;
-}
-
-.message-box.received {
-    -fx-background-color: #E5E5EA;
-    -fx-alignment: CENTER-LEFT;
-}
-
-.ai-button {
-    -fx-background-color: #4a90e2;
-    -fx-text-fill: white;
-}
-```
-
-### Message Model
-```java
-@Document(collection = "messages")
-public class Message {
-    @Id
-    private String id;
-    private String senderId;
-    private String content;
-    private LocalDateTime timestamp;
-}
-```
